@@ -35,14 +35,14 @@
           <div  >
             <h3>Descifrado Afín</h3>
             <div>
-              <label for="cipheredMessage">Mensaje Cifrado:</label>
+              <label for="cipheredMessage">Mensaje a descifrar:</label>
             </div>
             <div>
               <textarea id="cipheredMessage" size="50" style="padding:50px 180px" type="text" v-model="desMenssage" />
             </div>
             <button @click="decipherMessage()">Descifrar</button>
             <div>
-              <label for="originalMessage">Mensaje Original:</label>
+              <label for="originalMessage">Mensaje Descifrado:</label>
             </div>
             <div>
               <textarea id="originalMessage" size="50" style="padding:50px 180px" type="text" :value="desMosMenssage" />
