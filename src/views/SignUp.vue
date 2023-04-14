@@ -76,7 +76,7 @@ export default {
         alert("a y mod no son coprimos");
         return;
       }
-      let cadena = this.originalMessage.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-zA-Z ]/gi, "").replace(/[^\w\s]/gi, ''); 
+      let cadena = this.originalMessage.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-zA-Z ]/gi, "").replace(/[^\w\s]/gi, '').replace(/[/\s+]/gi, ''); 
       let cadenas = cadena.toUpperCase();
       console.log(cadenas);
       let cipheredMessage = "";
