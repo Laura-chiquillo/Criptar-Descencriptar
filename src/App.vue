@@ -14,7 +14,7 @@ Coded by www.creative-tim.com
 -->
 <template>
   <main
-    class="main-content position-relative max-height-vh-100 h-100 overflow-x-hidden"
+    class="main-content position-relative overflow-x-hidden" 
   >
     <router-view />
   </main>

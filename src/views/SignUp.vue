@@ -4,9 +4,9 @@
       <div class="row">
       </div>
     </div>
-    <main class="position-relative h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center">
+    <main  id="layout" class="position-relative  m-3 px-7 border-radius-lg d-flex flex-column justify-content-center">
       <section>  
-        <div class=" flex-direction :column" style="display:flex;flex-direction:row;height:100vh; align-items:center;gap:3em">
+        <div class="cuadro1" >
           <div  >
             <h3>Cifrado Afín</h3>
             <div>
@@ -14,7 +14,7 @@
               
             </div>
             <div>
-              <textarea id="originalMessage" type="text" style="width:100%;padding:4px 2px;" v-model="originalMessage" />
+              <textarea id="originalMessage" type="text" style="width: 450px; height: 150px; padding: .2em .5em;" v-model="originalMessage" />
             </div>
             <div>
               <label for="aValue">Valor de a:</label>
@@ -29,23 +29,43 @@
               <label for="cipheredMessage">Mensaje Cifrado:</label>
             </div>          
             <div>
-              <textarea id="cipheredMessage" size="50" style="padding:50px 180px" type="text" :value="cipheredMessage" />
+              <textarea id="cipheredMessage" size="50" style="width: 450px; height: 150px; padding: .2em .5em;" type="text" :value="cipheredMessage" />
             </div>
           </div>
           <div  >
             <h3>Descifrado Afín</h3>
+
             <div>
               <label for="cipheredMessage">Mensaje a descifrar:</label>
             </div>
             <div>
-              <textarea id="cipheredMessage" size="50" style="padding:50px 180px" type="text" v-model="desMenssage" />
+              <textarea id="cipheredMessage" size="50" style="width: 450px; height: 150px; padding: .2em .5em;" type="text" v-model="desMenssage" />
             </div>
             <button @click="decipherMessage()">Descifrar</button>
+            <div v-show="masRepetida1">
+              <label style="margin: 0.1em 0;" for="">Análisis de frecuecia</label>
+              <input disabled style="width: 100%; margin: .3em 0;" name="" id="" :value="`Letra mas repetida: ${masRepetida1}. Segunda mas repedida ${masRepetida2}.`">
+              <input disabled style="width: 100%; margin: .3em 0;" name="" id="" :value="`A: ${resA} y B: ${resB}`">
+            </div>
             <div>
               <label for="originalMessage">Mensaje Descifrado:</label>
             </div>
             <div>
-              <textarea id="originalMessage" size="50" style="padding:50px 180px" type="text" :value="desMosMenssage" />
+              <textarea id="originalMessage" size="50" style="width: 450px; height: 150px; padding: .2em .5em;" type="text" :value="desMosMenssage" />
+            </div>
+            <button @click="invertirAYB()">Invertir a y b</button>
+            <div>            
+              <div v-show="masRepetida1">
+                <label style="margin: 0.1em 0;" for="">Claves usadas</label>
+                <input disabled style="width: 100%; margin: .3em 0;" name="" id="" :value="`A: ${resA} y B: ${resB}`">
+              </div>
+              <div>
+                <label for="originalMessage">Mensaje Descifrado con fuerza bruta:</label>
+              </div>
+              <div>
+                <textarea id="originalMessage" size="50" style="width: 450px; height: 150px; padding: .2em .5em;" type="text" :value="desMosMenssage" />
+              </div>
+              <button @click="invertirAYB()">Siguiente combinacion</button>
             </div>
           </div>
         </div>
@@ -55,34 +75,46 @@
 </template>
 
 <script>
+
 export default {
   data() {
     return {
-      originalMessage: "",
-      a: 0,
-      b: 0,
+      originalMessage: "Los discos SSD M.2 pueden ser de diferentes tamaños, a diferencia de los anteriores mSATA, estos son más rectangulares que cuadrados. Las medidas pueden ser desde los 42 mm de largo hasta los 110, así las unidades SSD M.2 disponen de un código que especifica este largo además de su ancho, por ejemplo, las unidades más comunes son las SSD M.2 2280 que disponen de 22 mm de ancho y 80 de largo, aunque para ordenadores más reducidos como puede ser un portátil o un Mini PC se suele usar la SSD M.2 22",
+      a: "",
+      b: "",
       cipheredMessage: "",
       desMenssage: "",
       desMosMenssage: "",
+      desMosMenssageBruto: "",
+      masRepetida1: "",
+      masRepetida2: "",
+      resA: "",
+      resB: "",
+      brutoA: "",
+      brutoB: "",
+
     };
   },
   methods: {
     cipherMessage() {
       const alphabet = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ".split("");
       const mod = 27;
+      const dicccionarioPalabras = {}
       const a = parseInt(this.a);
       const b = parseInt(this.b);
       if(!this.coprimos(a,mod)){
         alert("a y mod no son coprimos");
         return;
       }
-      let cadena = this.originalMessage.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-zA-Z ]/gi, "").replace(/[^\w\s]/gi, '').replace(/[/\s+]/gi, ''); 
+      let cadena = this.originalMessage.toLowerCase().replace(/[^a-zA-Zñ]/g, ""); 
       let cadenas = cadena.toUpperCase();
-      console.log(cadenas);
       let cipheredMessage = "";
       for (let i = 0; i < cadenas.length; i++) {
         const char = cadenas[i];
         const index = alphabet.indexOf(char);
+        dicccionarioPalabras[char] = dicccionarioPalabras[char] ? dicccionarioPalabras[char] + 1 : 1;
+
+        
         if (index !== -1) {
           const newIndex = (a * index + b) % mod;
           const newChar = alphabet[newIndex];
@@ -91,6 +123,7 @@ export default {
           cipheredMessage += char;
         }
       }
+      
       this.cipheredMessage = cipheredMessage;
     },
     coprimos(a, b) {
@@ -107,17 +140,49 @@ export default {
     decipherMessage() {
       const alphabet = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ".split("");
       const mod = 27;
-      const a = parseInt(this.a);
-      const b = parseInt(this.b);
+      const dicccionarioPalabras = {} // Diccionario con frecuencias de las palabras
       let message = this.desMenssage.toLowerCase();
       let cadena = message.toUpperCase();
       let decipheredMessage = "";
       for (let i = 0; i < cadena.length; i++) {
         const char = cadena[i];
+        // va sumando cada letra que va encontrando
+        dicccionarioPalabras[char] = dicccionarioPalabras[char] ? dicccionarioPalabras[char] + 1 : 1;
+        
+      }
+      console.log(dicccionarioPalabras);
+      // Itermaos las letras con sus frecuencias para encontrar las dos mayores
+      let mayor1 = 0;
+      let letraMayor1 = 0
+      let letraMayor2 = 0
+      let mayor2 = 0;
+      for (let a in dicccionarioPalabras ) {
+        if (mayor1 < dicccionarioPalabras[a]) {
+          mayor1 = dicccionarioPalabras[a]
+          letraMayor1 = a
+        }
+      }
+      for (let a in dicccionarioPalabras ) {
+        if (mayor2 < dicccionarioPalabras[a] && a !== letraMayor1) {
+          mayor2 = dicccionarioPalabras[a]
+          letraMayor2 = a
+        }
+      }
+      this.masRepetida1 = letraMayor1
+      this.masRepetida2 = letraMayor2
+      // Encontrar los valor de a y b par descrifrar con la formula
+      this.resB = alphabet.indexOf(this.masRepetida2)
+      console.log(alphabet.indexOf(this.masRepetida1) - alphabet.indexOf(this.masRepetida2));
+      console.log(((alphabet.indexOf(this.masRepetida1) - alphabet.indexOf(this.masRepetida2)) * 7));
+      this.resA = this.modulus(((alphabet.indexOf(this.masRepetida1) - alphabet.indexOf(this.masRepetida2)) * 7), mod)
+
+      /// Cuando ya tenemos en valor de a y b se procede a usar la formula de descifrado
+      for (let i = 0; i < cadena.length; i++) {
+        const char = cadena[i];
         const index = alphabet.indexOf(char);
+        
         if (index !== -1) {
-          const newIndex = this.modulus((index - b)* this.modInverse(a,mod), mod);         
-           console.log(this.modInverse(a,mod));
+          const newIndex = this.modulus((index - this.resB)* this.modInverse(this.resA,mod), mod);         
           const newChar = alphabet[newIndex];
           decipheredMessage += newChar;
         } else {
@@ -134,10 +199,57 @@ export default {
     },
     modulus(a, mod) {
       return ((a % mod) + mod) % mod;
+    },
+    invertirAYB() {
+      const alphabet = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ".split("");
+      const mod = 27;
+      let message = this.desMenssage.toLowerCase();
+      let cadena = message.toUpperCase();
+      let decipheredMessage = ""
+      let b = this.resB
+      this.resB = this.resA
+      this.resA = b
+      
+      /// Cuando ya tenemos en valor de a y b se procede a usar la formula de descifrado
+      for (let i = 0; i < cadena.length; i++) {
+        const char = cadena[i];
+        const index = alphabet.indexOf(char);
+        
+        if (index !== -1) {
+          const newIndex = this.modulus((index - this.resB)* this.modInverse(this.resA,mod), mod);         
+          const newChar = alphabet[newIndex];
+          decipheredMessage += newChar;
+        } else {
+          decipheredMessage += char;
+        }
+      }
+      this.desMosMenssage = decipheredMessage;
+
     }
   },
 };
 </script>
 <style scoped>
 input { margin: 0 2em;}
+
+.cuadro1 {
+  display:flex;
+  flex-direction:row;
+  height:100vh;
+  align-items:center;
+  gap:3em;
+}
+
+@media only screen and (max-width: 1100px) {
+  .cuadro1 {
+    display:flex;
+    flex-direction:column;
+    height:100vh;
+    align-items:center;
+    gap:3em;
+  }
+
+  
+}
+
 </style>
