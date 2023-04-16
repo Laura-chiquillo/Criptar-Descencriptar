@@ -79,7 +79,7 @@
 export default {
   data() {
     return {
-      originalMessage: "Los discos SSD M.2 pueden ser de diferentes tamaños, a diferencia de los anteriores mSATA, estos son más rectangulares que cuadrados. Las medidas pueden ser desde los 42 mm de largo hasta los 110, así las unidades SSD M.2 disponen de un código que especifica este largo además de su ancho, por ejemplo, las unidades más comunes son las SSD M.2 2280 que disponen de 22 mm de ancho y 80 de largo, aunque para ordenadores más reducidos como puede ser un portátil o un Mini PC se suele usar la SSD M.2 22",
+      originalMessage: "",
       a: "",
       b: "",
       cipheredMessage: "",
@@ -99,7 +99,6 @@ export default {
     cipherMessage() {
       const alphabet = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ".split("");
       const mod = 27;
-      const dicccionarioPalabras = {}
       const a = parseInt(this.a);
       const b = parseInt(this.b);
       if(!this.coprimos(a,mod)){
@@ -112,9 +111,6 @@ export default {
       for (let i = 0; i < cadenas.length; i++) {
         const char = cadenas[i];
         const index = alphabet.indexOf(char);
-        dicccionarioPalabras[char] = dicccionarioPalabras[char] ? dicccionarioPalabras[char] + 1 : 1;
-
-        
         if (index !== -1) {
           const newIndex = (a * index + b) % mod;
           const newChar = alphabet[newIndex];
@@ -144,6 +140,7 @@ export default {
       let message = this.desMenssage.toLowerCase();
       let cadena = message.toUpperCase();
       let decipheredMessage = "";
+      
       for (let i = 0; i < cadena.length; i++) {
         const char = cadena[i];
         // va sumando cada letra que va encontrando
