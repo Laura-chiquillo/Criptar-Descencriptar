@@ -183,7 +183,11 @@ export default {
     return 1;
     },
     modulus(a, mod) {
-      return ((a % mod) + mod) % mod;
+      const num = ((a % mod) + mod) % mod;
+      if (num > 0){
+        return num;
+      }
+      return num + mod;
     },
     invertirAYB() {
       const alphabet = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ".split("");
