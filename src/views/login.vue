@@ -28,14 +28,11 @@
                   <div class="card card-plain">
                     <div class="pb-0 card-header bg-transparent mb-4">
                       <h4 class="font-weight-bolder">Sign In</h4>
-                      <p class="mb-0">
-                        Enter your email and password to register
-                      </p>
                     </div>
                     <div class="card-body">
-                      <form role="form">
+                      <form >
                         <div class="mb-3">
-                          <material-input
+                          <material-input 
                             id="email"
                             type="email"
                             label="Email"
@@ -44,7 +41,7 @@
                           />
                         </div>
                         <div class="mb-3">
-                          <material-input
+                          <material-input 
                             id="password"
                             type="password"
                             label="Password"
@@ -109,8 +106,17 @@
       this.toggleHideConfig();
       body.classList.add("bg-gray-100");
     },
+    data() {
+      return {
+        email: "",
+        password: "",
+      };
+    },
     methods: {
       ...mapMutations(["toggleEveryDisplay", "toggleHideConfig"]),
+      login() {
+        this.email = this.$refs.email.value;
+      },
     },
   };
   </script>
