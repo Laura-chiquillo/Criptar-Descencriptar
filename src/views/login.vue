@@ -4,7 +4,7 @@
         <div class="row">
         </div>
       </div>
-      <main class="mt-0 main-content">
+      <main class="mt-0 main-content" @submit.prevent="handleSubmit">
         <section>
           <div class="page-header min-vh-100">
             <div class="container">
@@ -36,6 +36,7 @@
                             id="email"
                             type="email"
                             label="Email"
+                            v-model="email"
                             name="email"
                             size="lg"
                           />
@@ -45,6 +46,7 @@
                             id="password"
                             type="password"
                             label="Password"
+                            v-model="password"
                             name="password"
                             size="lg"
                           />
@@ -86,15 +88,18 @@
   import MaterialInput from "@/components/MaterialInput.vue";
   import MaterialCheckbox from "@/components/MaterialCheckbox.vue";
   import MaterialButton from "@/components/MaterialButton.vue";
+
   const body = document.getElementsByTagName("body")[0];
   import { mapMutations } from "vuex";
   
+
   export default {
-    name: "sign-up",
+    name: "login",
     components: {
       MaterialInput,
       MaterialCheckbox,
       MaterialButton,
+ 
     },
     beforeMount() {
       this.toggleEveryDisplay();
@@ -114,8 +119,9 @@
     },
     methods: {
       ...mapMutations(["toggleEveryDisplay", "toggleHideConfig"]),
-      login() {
-        this.email = this.$refs.email.value;
+      handleSubmit(e) {
+        e.preventDefault();
+        this.$router.push("SingUp");
       },
     },
   };
