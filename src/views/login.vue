@@ -52,18 +52,6 @@
                             size="lg"
                           />
                         </div>
-                        <material-checkbox
-                          id="flexCheckDefault"
-                          class="font-weight-light"
-                          checked
-                        >
-                          I agree the
-                          <a
-                            href="../../../pages/privacy.html"
-                            class="text-dark font-weight-bolder"
-                            >Terms and Conditions</a
-                          >
-                        </material-checkbox>
                         <div class="text-center">
                           <material-button
                             class="mt-4"
@@ -74,16 +62,6 @@
                             @click="handleSubmit()"
                             >Sign Up</material-button>
                         </div>
-                        <div class="px-1 pt-0 text-center card-footer px-lg-2">
-                    <p class="mx-auto mb-4 text-sm">
-                      Don't have an account?
-                      <router-link
-                        :to="{ name: 'SignIn' }"
-                        class="text-success text-gradient font-weight-bold"
-                        >Sign In</router-link
-                      >
-                    </p>
-                  </div>
                       </form>
                     </div>
                   </div>
@@ -99,7 +77,6 @@
   
   <script>
   import MaterialButton from "@/components/MaterialButton.vue";
-import MaterialCheckbox from "@/components/MaterialCheckbox.vue";
 import MaterialInput from "@/components/MaterialInput.vue";
 import { mapMutations } from "vuex";
 
@@ -110,7 +87,6 @@ import { mapMutations } from "vuex";
     name: "login",
     components: {
       MaterialInput,
-      MaterialCheckbox,
       MaterialButton,
  
     },
