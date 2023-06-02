@@ -172,6 +172,7 @@ import { mapMutations } from "vuex";
       if (email == "laura@gmail.com" && password == "niño-2023.") {
         this.$router.push("SingUp");
         console.log("hola");
+        alert("datos incorrectos");
       } else {
         this.contador += 1;
         console.log("error");
