@@ -1,4 +1,5 @@
 <template>
+  <form @submit.prevent="handleSubmit" >
     <div class="bg-white">
       <div class="container top-0 position-sticky z-index-sticky">
         <div class="row">
@@ -70,8 +71,19 @@
                             color="success"
                             fullWidth
                             size="lg"
+                            @click="handleSubmit()"
                             >Sign Up</material-button>
                         </div>
+                        <div class="px-1 pt-0 text-center card-footer px-lg-2">
+                    <p class="mx-auto mb-4 text-sm">
+                      Don't have an account?
+                      <router-link
+                        :to="{ name: 'SignIn' }"
+                        class="text-success text-gradient font-weight-bold"
+                        >Sign In</router-link
+                      >
+                    </p>
+                  </div>
                       </form>
                     </div>
                   </div>
@@ -82,15 +94,16 @@
         </section>
       </main>
     </div>
+  </form>
   </template>
   
   <script>
-  import MaterialInput from "@/components/MaterialInput.vue";
-  import MaterialCheckbox from "@/components/MaterialCheckbox.vue";
   import MaterialButton from "@/components/MaterialButton.vue";
+import MaterialCheckbox from "@/components/MaterialCheckbox.vue";
+import MaterialInput from "@/components/MaterialInput.vue";
+import { mapMutations } from "vuex";
 
   const body = document.getElementsByTagName("body")[0];
-  import { mapMutations } from "vuex";
   
 
   export default {
@@ -115,14 +128,65 @@
       return {
         email: "",
         password: "",
+        segundos: 300,
+        contador: 0,
       };
     },
     methods: {
       ...mapMutations(["toggleEveryDisplay", "toggleHideConfig"]),
-      handleSubmit(e) {
-        e.preventDefault();
+      
+      tiempo() {
+      if (this.segundos == 0) {
+        this.segundos = 300;
+      } else {
+        this.segundos--;
+        setTimeout(this.tiempo, 1000);
+      }
+    },
+    bloquear() {
+      var usuario = document.getElementById("usuario");
+      var contraseña = document.getElementById("contraseña");
+
+      usuario.disabled = true;
+      contraseña.disabled = true;
+
+      setTimeout(() => {
+        usuario.disabled = false;
+        contraseña.disabled = false;
+      }, 300000);
+    },
+    mostrar() {
+      var tipo = document.getElementById("contraseña");
+
+      if (tipo.type == "password") {
+        tipo.type = "text";
+      } else {
+        tipo.type = "password";
+      }
+    },
+
+    handleSubmit() {
+      var email = document.getElementById("email").value;
+      var password = document.getElementById("password").value;
+
+      if (email == "laura@gmail.com" && password == "niño-2023.") {
         this.$router.push("SingUp");
-      },
+        console.log("hola");
+      } else {
+        this.contador += 1;
+        console.log("error");
+      }
+      if (this.contador == 3) {
+        alert("Ultimo intento para ingresar los datos correctamente");
+      }
+
+      if (this.contador == 4) {
+        alert("Bloqueado");
+        this.contador = 0;
+        this.bloquear();
+        this.tiempo();
+      }
+    },
     },
   };
   </script>
